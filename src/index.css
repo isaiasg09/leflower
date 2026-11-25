@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0F1115;
+  --color-surface: #1A1D24;
+  --color-surface-elevated: #232732;
+  --color-ink: #E8EDF5;
+  --color-ink-muted: #A6B0C2;
+  --color-accent: #D4AF37;
+  --color-accent-bright: #E8C962;
+  --color-botanical: #A69C6B;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Lato", system-ui, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    scroll-behavior: auto;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+/* Fixed subtle film grain overlay (GPU safe, pointer-events-none) */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Organic rising steam animation (compositor-only: transform + opacity) */
+@keyframes steamWisp {
+  0% {
+    transform: translate3d(0, 14px, 0) scaleX(0.92);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.45;
+  }
+  70% {
+    opacity: 0.25;
+  }
+  100% {
+    transform: translate3d(-6px, -68px, 0) scaleX(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes steamWispAlt {
+  0% {
+    transform: translate3d(4px, 12px, 0) scaleX(0.95);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.36;
+  }
+  100% {
+    transform: translate3d(8px, -60px, 0) scaleX(1.14);
+    opacity: 0;
+  }
+}
+
+.steam-wisp-1 {
+  animation: steamWisp 5.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.steam-wisp-2 {
+  animation: steamWispAlt 6.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.6s infinite;
+}
+
+.steam-paused .steam-wisp-1,
+.steam-paused .steam-wisp-2 {
+  animation-play-state: paused;
+}
+
+/* 3-second gentle pulse for "Agendar Mesa" icon */
+@keyframes gentlePulse {
+  0%,
+  72%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  84% {
+    transform: scale(1.14);
+    opacity: 0.92;
+  }
+}
+
+.icon-pulse-3s {
+  animation: gentlePulse 3s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+
+/* Fluid espresso crema wave inside menu beverage card */
+@keyframes cremaFlow {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.crema-wave-track {
+  animation: cremaFlow 7s linear infinite;
+}
+
+/* Ken Burns slow macro pan/zoom for active gallery and dish close-up loop */
+@keyframes macroDrift {
+  0% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(-1.5%, -1.5%, 0);
+  }
+  100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+}
+
+.macro-loop {
+  animation: macroDrift 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Fixed glass surface (Fluid Island & Overlays only) */
+.fluid-glass {
+  background: linear-gradient(135deg, rgba(26, 29, 36, 0.86), rgba(15, 17, 21, 0.78));
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .fluid-glass {
+    background: #1A1D24;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift {
+    transition: transform 280ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .hover-lift:hover {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steam-wisp-1,
+  .steam-wisp-2,
+  .icon-pulse-3s,
+  .crema-wave-track,
+  .macro-loop {
+    animation: none !important;
+  }
+}
